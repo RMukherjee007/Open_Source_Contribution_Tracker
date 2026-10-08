@@ -21,10 +21,17 @@ const getGithubMetrics = async (req, res) => {
             return res.json(JSON.parse(cachedData));
         }
 
+        const reqHeaders = {
+            'User-Agent': 'os-tracker'
+        };
+        if (process.env.GITHUB_TOKEN) {
+            reqHeaders.Authorization = `token ${process.env.GITHUB_TOKEN}`;
+        }
+
         // RESUME CLAIM: Asynchronously aggregated developer metrics
         const [profileRes, reposRes] = await Promise.all([
-            axios.get(`https://api.github.com/users/${username}`),
-            axios.get(`https://api.github.com/users/${username}/repos?per_page=5&sort=updated`)
+            axios.get(`https://api.github.com/users/${username}`, { headers: reqHeaders }),
+            axios.get(`https://api.github.com/users/${username}/repos?per_page=5&sort=updated`, { headers: reqHeaders })
         ]);
 
         const data = {

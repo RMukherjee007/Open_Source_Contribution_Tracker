@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+os-tracker-backend/node_modules/
+os-tracker-frontend/node_modules/
+
+# Production build
+dist/
+os-tracker-frontend/dist/
+
+# Environment files
+.env
+.env.local
+.env.production
+*.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# System and IDE
+.DS_Store
+.idea/
+.vscode/

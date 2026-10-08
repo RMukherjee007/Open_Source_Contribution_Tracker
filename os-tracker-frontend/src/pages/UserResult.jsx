@@ -14,12 +14,14 @@ function UserResult({ saveRecentSearch, toggleFavorite, favorites }) {
   const fetchUserData = async (userToFetch) => {
     setLoading(true);
     setError('');
-    setData(null);
-
     try {
-      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? `http://localhost:5001/api/github/${userToFetch}`
-        : `/api/github/${userToFetch}`;
+      const envApiUrl = import.meta.env.VITE_API_URL;
+      const baseUrl = envApiUrl
+        ? envApiUrl.replace(/\/$/, '')
+        : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5001'
+            : '');
+      const apiUrl = `${baseUrl}/api/github/${userToFetch}`;
 
       const response = await axios.get(apiUrl);
       setData(response.data);

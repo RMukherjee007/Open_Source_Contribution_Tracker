@@ -1,0 +1,14 @@
+{
+  "name": "os-tracker",
+  "version": "1.0.0",
+  "description": "OS Tracker - Open Source Footprint Analytics",
+  "scripts": {
+    "build": "npm --prefix os-tracker-frontend install && npm --prefix os-tracker-frontend run build && npm --prefix os-tracker-backend install",
+    "start": "node os-tracker-backend/server.js",
+    "dev:backend": "npm --prefix os-tracker-backend run dev",
+    "dev:frontend": "npm --prefix os-tracker-frontend run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

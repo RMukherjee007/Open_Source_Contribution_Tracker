@@ -1,0 +1,8 @@
+node_modules
+os-tracker-backend/node_modules
+os-tracker-frontend/node_modules
+os-tracker-frontend/dist
+.git
+.gitignore
+.env
+.DS_Store
