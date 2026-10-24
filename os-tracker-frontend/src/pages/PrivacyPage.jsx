@@ -54,5 +54,3 @@ function PrivacyPage() {
 }
 
 export default PrivacyPage;
-
-// Ide sync commit

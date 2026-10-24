@@ -3,7 +3,7 @@ import Icons from './Icons';
 
 function Footer() {
   return (
-    <footer className="app-footer mt-12 pb-6 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
+    <footer className="app-footer">
       <div className="container footer-content">
         <div className="footer-logo">
           <Icons.Code /> OS Tracker
@@ -22,5 +22,3 @@ function Footer() {
 }
 
 export default Footer;
-
-// Ide sync commit

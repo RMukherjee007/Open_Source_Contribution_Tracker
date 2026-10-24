@@ -14,5 +14,3 @@ const Icons = {
 };
 
 export default Icons;
-
-// Ide sync commit

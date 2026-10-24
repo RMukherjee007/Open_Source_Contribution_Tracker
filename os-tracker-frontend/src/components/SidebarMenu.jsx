@@ -75,5 +75,3 @@ function SidebarMenu({ isOpen, onClose, recentSearches, favorites, clearHistory 
 }
 
 export default SidebarMenu;
-
-// Ide sync commit

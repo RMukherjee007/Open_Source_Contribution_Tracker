@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* High-Contrast Light Theme Design Tokens */
+  /* Original High-Contrast Light Theme Design Tokens */
   --bg-main: #f8f9fc;
   --bg-pure: #ffffff;
   
@@ -18,15 +18,34 @@
   --border-color: #d1d5db;
   --nav-bg: rgba(255, 255, 255, 0.6);
   
-  /* Semantic Card Colors */
+  /* Profile & Search Tokens (Original Light Mode) */
+  --avatar-card-bg: var(--color-green);
+  --avatar-card-text: var(--color-black);
+  --avatar-card-border: var(--color-black);
+  --stats-card-bg: var(--color-black);
+  --stats-card-text: var(--bg-pure);
+  --stats-card-accent: var(--color-green);
+  --search-btn-bg: var(--color-black);
+  --search-btn-text: var(--bg-pure);
+  --search-btn-hover: var(--color-dark-grey);
+
+  /* Semantic Card Colors (Original Light Mode) */
   --card-bg-1: var(--color-black);
   --card-text-1: var(--bg-pure);
+  --card-accent-1: var(--color-green);
   --card-bg-2: var(--color-green);
   --card-text-2: var(--color-black);
   --card-bg-3: var(--color-grey);
   --card-text-3: var(--color-black);
   --card-bg-4: var(--bg-pure);
   --card-text-4: var(--color-black);
+
+  /* Chart Tokens */
+  --chart-bar-dark: #14532d;
+  --chart-bar-mid: #1f7a4c;
+  --chart-bar-light: #52b788;
+  --chart-accent-text: #1f7a4c;
+  --chart-hatch-color: rgba(156, 163, 175, 0.45);
   
   --font-heading: 'Outfit', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -35,6 +54,7 @@
   --radius-xl: 40px;
   --radius-lg: 30px;
   --radius-md: 20px;
+  --radius-sm: 10px;
   --radius-full: 9999px;
   
   /* Transitions */
@@ -43,32 +63,51 @@
 }
 
 [data-theme="dark"] {
-  /* Softer Dark Mode Palette */
-  --bg-main: #121212;
-  --bg-pure: #1e1e1e;
+  /* Eye-Friendly, WCAG-Accessible Dark Mode Palette */
+  --bg-main: #0d1117;
+  --bg-pure: #161b22;
   
-  --color-black: #f3f4f6; /* Soft white for text */
-  --color-green: #4ade80; /* Softer, less neon green */
-  --color-grey: #2d3748;
-  --color-dark-grey: #9ca3af;
+  --color-black: #e6edf3;
+  --color-green: #34d399;
+  --color-grey: #21262d;
+  --color-dark-grey: #8b949e;
   
-  --text-main: var(--color-black);
-  --text-inverse: var(--bg-main);
-  --text-green: var(--color-green);
-  --text-primary: var(--color-black);
+  --text-main: #e6edf3;
+  --text-inverse: #0d1117;
+  --text-green: #34d399;
+  --text-primary: #e6edf3;
   
-  --border-color: #374151;
-  --nav-bg: rgba(10, 10, 10, 0.6);
+  --border-color: #262c36;
+  --nav-bg: rgba(22, 27, 34, 0.8);
 
-  /* Less contrasty cards for dark mode */
-  --card-bg-1: #2d3748;
-  --card-text-1: #ffffff;
-  --card-bg-2: rgba(74, 222, 128, 0.15); /* Subtle green tint */
-  --card-text-2: #4ade80;
-  --card-bg-3: #2d3748;
-  --card-text-3: #f3f4f6;
-  --card-bg-4: #1e1e1e;
-  --card-text-4: #f3f4f6;
+  /* Profile & Search Tokens (Dark Mode Only) */
+  --avatar-card-bg: #12261e;
+  --avatar-card-text: #ecfdf5;
+  --avatar-card-border: rgba(52, 211, 153, 0.3);
+  --stats-card-bg: #161b22;
+  --stats-card-text: #e6edf3;
+  --stats-card-accent: #6ee7b7;
+  --search-btn-bg: #238636;
+  --search-btn-text: #ffffff;
+  --search-btn-hover: #2ea043;
+
+  /* Low-Strain Semantic Cards for Dark Mode */
+  --card-bg-1: #161b22;
+  --card-text-1: #e6edf3;
+  --card-accent-1: #6ee7b7;
+  --card-bg-2: #12261e;
+  --card-text-2: #a7f3d0;
+  --card-bg-3: #1c222b;
+  --card-text-3: #e6edf3;
+  --card-bg-4: #161b22;
+  --card-text-4: #e6edf3;
+
+  /* Chart Tokens in Dark Mode */
+  --chart-bar-dark: #1e4d38;
+  --chart-bar-mid: #287a55;
+  --chart-bar-light: #34d399;
+  --chart-accent-text: #6ee7b7;
+  --chart-hatch-color: rgba(139, 148, 158, 0.25);
 }
 
 html {
@@ -94,7 +133,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 500;
-  letter-spacing: -0.05em; /* Tight tracking for headings */
+  letter-spacing: -0.05em;
   color: var(--color-black);
   line-height: 1.1;
 }

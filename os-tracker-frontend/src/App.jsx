@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 
 // Components
@@ -16,64 +16,62 @@ import AboutPage from './pages/AboutPage';
 import PrivacyPage from './pages/PrivacyPage';
 
 function App() {
-  const [recentSearches, setRecentSearches] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      const saved = localStorage.getItem('recentSearches');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed.filter(item => typeof item === 'object' && item.login) : [];
+      }
+    } catch {
+      // Ignore malformed localStorage
+    }
+    return [];
+  });
+
+  const [favorites, setFavorites] = useState(() => {
+    try {
+      const saved = localStorage.getItem('favorites');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch {
+      // Ignore malformed localStorage
+    }
+    return [];
+  });
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
-  const location = useLocation();
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('app-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  });
 
   useEffect(() => {
-    // Load theme preference
-    const savedTheme = localStorage.getItem('app-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
-    const savedSearches = localStorage.getItem('recentSearches');
-    if (savedSearches) {
-      try {
-        const parsed = JSON.parse(savedSearches);
-        const valid = parsed.filter(item => typeof item === 'object' && item.login);
-        setRecentSearches(valid);
-      } catch (e) { }
-    }
-
-    const savedFavs = localStorage.getItem('favorites');
-    if (savedFavs) {
-      try { setFavorites(JSON.parse(savedFavs)); } catch (e) { }
-    }
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('app-theme', newTheme);
   };
 
-  // Close menu when route changes
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location.pathname]);
-
-  const saveRecentSearch = (userObj) => {
+  const saveRecentSearch = useCallback((userObj) => {
     setRecentSearches(prev => {
       let updated = [userObj, ...prev.filter(s => s.login.toLowerCase() !== userObj.login.toLowerCase())];
       if (updated.length > 10) updated = updated.slice(0, 10);
       localStorage.setItem('recentSearches', JSON.stringify(updated));
       return updated;
     });
-  };
+  }, []);
 
   const toggleFavorite = (userObj) => {
     setFavorites(prev => {
       const exists = prev.find(f => f.login === userObj.login);
-      let updated;
-      if (exists) {
-        updated = prev.filter(f => f.login !== userObj.login);
-      } else {
-        updated = [userObj, ...prev];
-      }
+      const updated = exists
+        ? prev.filter(f => f.login !== userObj.login)
+        : [userObj, ...prev];
       localStorage.setItem('favorites', JSON.stringify(updated));
       return updated;
     });

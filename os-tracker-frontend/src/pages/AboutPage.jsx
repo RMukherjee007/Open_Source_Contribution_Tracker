@@ -48,5 +48,3 @@ function AboutPage() {
 }
 
 export default AboutPage;
-
-// Ide sync commit

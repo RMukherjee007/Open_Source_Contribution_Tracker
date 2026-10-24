@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const githubRoutes = require('./routes/githubRoutes');
 const rateLimit = require('express-rate-limit');
+const redisClient = require('./utils/redisClient');
 
 const app = express();
 
@@ -17,24 +18,23 @@ app.use(cors());
 
 // Health check endpoint for Render service monitoring
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.status(200).json({
+    status: 'ok',
+    cacheBackend: redisClient.backendType || 'memory',
+    mongoConnected: mongoose.connection.readyState === 1,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Apply rate limiting to API requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
-  standardHeaders: true, // Return rate limit info in RateLimit-* headers
-  legacyHeaders: false, // Disable X-RateLimit-* headers
+  max: 150, // Limit each IP to 150 requests per window
+  standardHeaders: true,
+  legacyHeaders: false,
   message: { error: 'Too many requests from this IP, please try again after 15 minutes' }
 });
 app.use('/api', limiter);
-
-// Connect to MongoDB using an environment variable for the cloud, falling back to local
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/os-tracker';
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error('MongoDB error:', err));
 
 // Apply the routes
 app.use('/api/github', githubRoutes);
@@ -53,6 +53,14 @@ if (fs.existsSync(distPath)) {
   });
 }
 
-// Use dynamic port provided by Render (PORT env variable), fallback to 5001 locally
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+if (require.main === module) {
+  const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/os-tracker';
+  mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 4000 })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.warn('MongoDB connection optional fallback:', err.message));
+
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;
